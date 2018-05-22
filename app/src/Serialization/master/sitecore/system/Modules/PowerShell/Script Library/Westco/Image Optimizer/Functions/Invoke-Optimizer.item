@@ -1,0 +1,231 @@
+----item----
+version: 1
+id: {3367CAE7-40F6-456B-B3B3-368F8A3FC391}
+database: master
+path: /sitecore/system/Modules/PowerShell/Script Library/Westco/Image Optimizer/Functions/Invoke-Optimizer
+parent: {2DA86059-ADB0-4512-8239-19BD6939A384}
+name: Invoke-Optimizer
+master: {00000000-0000-0000-0000-000000000000}
+template: {DD22F1B3-BD87-4DB2-9E7D-F7A496888D43}
+templatekey: PowerShell Script
+created: 20180514T162710Z
+
+----field----
+field: {B1A94FF0-6897-47C0-9C51-AA6ACB80B1F0}
+name: Script
+key: script
+content-length: 6265
+
+function Get-HttpWebResponse {
+    [CmdletBinding()]
+    param(
+        [string]$RequestUrl,
+        [hashtable]$Headers,
+        [ValidateSet("string","bytes")]
+        [string]$As = "string"
+    )
+    
+    $data = ""
+    $request = [System.Net.WebRequest]::Create($RequestUrl) -as [System.Net.HttpWebRequest]
+    if($Headers) {
+        foreach($key in $Headers.Keys) {
+            $request.Headers.Add($key, $Headers[$key])
+        }
+    }
+    
+    $defaultProxy = [System.Web.Configuration.WebConfigurationManager]::GetSection("system.net/defaultProxy")
+    if($defaultProxy) {
+        $proxy = New-Object System.Net.WebProxy
+        $proxy.Address = $defaultProxy.Proxy.ProxyAddress
+        $proxy.Credentials = [System.Net.CredentialCache]::DefaultNetworkCredentials
+        $request.Proxy = $proxy
+    }
+
+    $response = [System.Net.HttpWebResponse]$request.GetResponse()
+    
+    if(!$response -or $response.StatusCode -ne [System.Net.HttpStatusCode]::OK) {
+        $response
+    } else {
+        if($As -eq "bytes") {
+            New-UsingBlock ($memory = New-Object System.IO.MemoryStream) {
+                $response.GetResponseStream().CopyTo($memory)
+                $memory.ToArray()
+            } 
+        } else {
+            New-UsingBlock ($reader = New-Object System.IO.StreamReader $response.GetResponseStream()) {
+                $reader.ReadToEnd()
+            }
+        }
+    }
+}
+
+function Invoke-FormRequest {
+    [CmdletBinding()]
+    param(
+        [ValidateNotNullOrEmpty()]
+        [Parameter(Mandatory = $true)]
+        [Uri]$Uri,
+        
+        [ValidateNotNullOrEmpty()]
+        [string]$FileName,
+        
+        [ValidateNotNullOrEmpty()]
+        [string]$ContentType = "application/octet-stream",
+
+        [System.Net.CookieContainer]$Cookie,
+        
+        [System.IO.Stream]$Stream
+    )
+    
+    process {
+        Add-Type -AssemblyName System.Net.Http
+
+		$httpClientHandler = New-Object System.Net.Http.HttpClientHandler
+		$defaultProxy = [System.Web.Configuration.WebConfigurationManager]::GetSection("system.net/defaultProxy")
+        if($defaultProxy) {
+            $proxy = New-Object System.Net.WebProxy
+            $proxy.Address = $defaultProxy.Proxy.ProxyAddress
+            $proxy.Credentials = [System.Net.CredentialCache]::DefaultNetworkCredentials
+            $httpClientHandler.Proxy = $proxy
+        }
+
+        if($Cookie) {
+            $httpClientHandler.CookieContainer = $Cookie
+        }
+
+        $httpClient = New-Object System.Net.Http.Httpclient $httpClientHandler
+        
+		$contentDispositionHeaderValue = New-Object System.Net.Http.Headers.ContentDispositionHeaderValue "form-data"
+	    $contentDispositionHeaderValue.Name = "files[]"
+		$contentDispositionHeaderValue.FileName = $Filename
+
+        $streamContent = New-Object System.Net.Http.StreamContent $stream
+        $streamContent.Headers.ContentDisposition = $contentDispositionHeaderValue
+        $streamContent.Headers.ContentType = New-Object System.Net.Http.Headers.MediaTypeHeaderValue $ContentType
+        
+        $content = New-Object System.Net.Http.MultipartFormDataContent
+        $content.Add($streamContent)
+
+        try {
+            $post = $httpClient.PostAsync($Uri, $content)
+			$response = $post.Result
+
+            if(!$response) {
+                throw $post.Exception.InnerException.InnerException
+            }
+
+			if (!$response.IsSuccessStatusCode) {
+				$responseBody = $response.Content.ReadAsStringAsync().Result
+				$errorMessage = "Status code {0}. Reason {1}. Server reported the following message: {2}." -f $response.StatusCode, $response.ReasonPhrase, $responseBody
+
+				throw [System.Net.Http.HttpRequestException] $errorMessage
+			}
+
+			return $response.Content.ReadAsStringAsync().Result
+        } catch [Exception] {
+			$PSCmdlet.ThrowTerminatingError($_)
+        } finally {
+            if($null -ne $httpClient) {
+                $httpClient.Dispose()
+            }
+
+            if($null -ne $response) {
+                $response.Dispose()
+            }
+        }
+    }
+}
+
+function Invoke-Optimizer {
+    param(
+        [item]$Item
+    )
+    
+    if($Item.Paths.IsMediaItem) {
+        $mediaItem = New-Object Sitecore.Data.Items.MediaItem $Item
+        $name = $Item.ID.ToShortID()
+        $extension = $mediaItem.Extension
+        $mimeType = $Item."Mime Type"
+        
+        $filename = "$($name).$($extension)"
+        $postUrl = "https://compressor.io/server/Lossy.php"
+
+        $cookieContainer = New-Object System.Net.CookieContainer
+        
+        $requestProps = @{
+            Uri = $postUrl
+            Cookie = $cookieContainer
+            Stream = $mediaItem.GetMediaStream()
+            ContentType = $mimeType
+            FileName = $filename
+        }
+        $data = Invoke-FormRequest @requestProps | ConvertFrom-Json
+        if(!$data) {
+            Write-Error "There was an issue with uploading the image data."
+            return
+        }
+        $file = $data.files | Select-Object -First 1
+    
+        Write-Host "Downloading image $($file.Name)"
+
+        $cookieStrings = @()
+        foreach($cookie in $cookieContainer.GetCookies($postUrl)) {
+            $cookieStrings += "$($cookie.name)=$($cookie.value)"
+        }
+        $headerCookie = $cookieStrings -join ";"
+        $headers = @{
+            [System.Net.HttpRequestHeader]::Cookie = $headerCookie
+        }
+
+        [byte[]]$bytes = Get-HttpWebResponse -RequestUrl $file.url -Headers $headers -As "bytes"
+        if(!$bytes) {
+            Write-Error "There was an issue downloading the image data."
+            return
+        }
+        New-UsingBlock ($memory = New-Object System.IO.MemoryStream) {
+            $memory.Write($bytes, 0, $bytes.Length)
+            [Sitecore.Resources.Media.Media]$media = [Sitecore.Resources.Media.MediaManager]::GetMedia($mediaItem)
+            $media.SetStream($memory, $extension)
+        }
+        
+        [PSCustomObject]@{
+            Name = $filename
+            SizeBefore = $file.size
+            SizeAfter = $file.sizeAfter
+            PercentageSaved = $file.percentage
+        }
+    }
+}
+----version----
+language: en
+version: 1
+revision: 5614ab27-661f-4d40-9ea7-417f4c73fa7a
+
+----field----
+field: {25BED78C-4957-4165-998A-CA1B52F67497}
+name: __Created
+key: __created
+content-length: 16
+
+20180514T162710Z
+----field----
+field: {8CDC337E-A112-42FB-BBB4-4143751E123F}
+name: __Revision
+key: __revision
+content-length: 36
+
+5614ab27-661f-4d40-9ea7-417f4c73fa7a
+----field----
+field: {D9CF14B1-FA16-4BA6-9288-E8A174D4D522}
+name: __Updated
+key: __updated
+content-length: 16
+
+20180522T144434Z
+----field----
+field: {BADD9CF9-53E0-4D0C-BCC0-2D784C282F6A}
+name: __Updated by
+key: __updated by
+content-length: 14
+
+sitecore\admin

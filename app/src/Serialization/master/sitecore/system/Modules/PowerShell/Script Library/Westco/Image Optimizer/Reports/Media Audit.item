@@ -1,0 +1,59 @@
+----item----
+version: 1
+id: {1706EAEE-34DC-437A-87EF-BFEE609329B3}
+database: master
+path: /sitecore/system/Modules/PowerShell/Script Library/Westco/Image Optimizer/Reports/Media Audit
+parent: {B0824BA6-80B7-48E1-80D6-331C8AA6F566}
+name: Media Audit
+master: {00000000-0000-0000-0000-000000000000}
+template: {AB154D3D-1126-4AB4-AC21-8B86E6BD70EA}
+templatekey: PowerShell Script Library
+created: 20180514T154400Z
+
+----field----
+field: {06D5295C-ED2F-4A54-9BF2-26228D113318}
+name: __Icon
+key: __icon
+content-length: 29
+
+Office/32x32/chart_bubble.png
+----version----
+language: en
+version: 1
+revision: 203985c0-6ba4-4d3c-b275-4e39b2adf0da
+
+----field----
+field: {52807595-0F8F-4B20-8D2A-CB71D28C6103}
+name: __Owner
+key: __owner
+content-length: 14
+
+sitecore\admin
+----field----
+field: {25BED78C-4957-4165-998A-CA1B52F67497}
+name: __Created
+key: __created
+content-length: 16
+
+20180514T154400Z
+----field----
+field: {8CDC337E-A112-42FB-BBB4-4143751E123F}
+name: __Revision
+key: __revision
+content-length: 36
+
+203985c0-6ba4-4d3c-b275-4e39b2adf0da
+----field----
+field: {D9CF14B1-FA16-4BA6-9288-E8A174D4D522}
+name: __Updated
+key: __updated
+content-length: 16
+
+20180515T172525Z
+----field----
+field: {BADD9CF9-53E0-4D0C-BCC0-2D784C282F6A}
+name: __Updated by
+key: __updated by
+content-length: 14
+
+sitecore\admin

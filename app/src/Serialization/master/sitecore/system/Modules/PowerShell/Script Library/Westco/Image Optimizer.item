@@ -1,0 +1,115 @@
+----item----
+version: 1
+id: {E25FAF14-7F37-484A-B728-32120EDF6AB2}
+database: master
+path: /sitecore/system/Modules/PowerShell/Script Library/Westco/Image Optimizer
+parent: {A0F4DB69-0C4B-4A1F-A144-45215A48F37F}
+name: Image Optimizer
+master: {00000000-0000-0000-0000-000000000000}
+template: {6D82FCD8-C379-443C-97A9-C6423C71E7D5}
+templatekey: PowerShell Script Module
+created: 20180522T144051Z
+
+----field----
+field: {218CA464-CB77-4C97-B141-34871ECAE00B}
+name: Enabled
+key: enabled
+content-length: 1
+
+1
+----field----
+field: {6D22BCCE-2799-4324-B0D9-C44DF5EFFAF3}
+name: Description
+key: description
+content-length: 87
+
+Optimize your images directly from the media library using online compression services.
+----field----
+field: {7093B5A2-4406-4272-9759-238BF60814FD}
+name: Whats new
+key: whats new
+content-length: 40
+
+- Uses the service https://compressor.io
+----field----
+field: {9911A28E-2120-4AB0-9113-5BAE386769C1}
+name: Module Version
+key: module version
+content-length: 5
+
+0.1.0
+----field----
+field: {53996CFF-BB46-498C-AE54-5D8C6AA7B6A4}
+name: Author
+key: author
+content-length: 12
+
+Michael West
+----field----
+field: {8DBAF611-51C6-4A44-A0DB-92C3DC6DDAC9}
+name: Url
+key: url
+content-length: 57
+
+https://github.com/michaellwest/westco-spe-imageoptimizer
+----field----
+field: {5337BB18-2B6A-4326-BD7E-E00010BEC356}
+name: License
+key: license
+content-length: 3
+
+MIT
+----field----
+field: {E1D6475E-58E6-4A11-8BEA-2E58B6F834F6}
+name: Published by
+key: published by
+content-length: 12
+
+Michael West
+----field----
+field: {06D5295C-ED2F-4A54-9BF2-26228D113318}
+name: __Icon
+key: __icon
+content-length: 27
+
+Software/32x32/jar_bean.png
+----version----
+language: en
+version: 1
+revision: 173442c0-af95-4ef9-9e1d-093f99f40c5e
+
+----field----
+field: {52807595-0F8F-4B20-8D2A-CB71D28C6103}
+name: __Owner
+key: __owner
+content-length: 14
+
+sitecore\admin
+----field----
+field: {25BED78C-4957-4165-998A-CA1B52F67497}
+name: __Created
+key: __created
+content-length: 16
+
+20180522T144051Z
+----field----
+field: {8CDC337E-A112-42FB-BBB4-4143751E123F}
+name: __Revision
+key: __revision
+content-length: 36
+
+173442c0-af95-4ef9-9e1d-093f99f40c5e
+----field----
+field: {D9CF14B1-FA16-4BA6-9288-E8A174D4D522}
+name: __Updated
+key: __updated
+content-length: 16
+
+20180522T144253Z
+----field----
+field: {BADD9CF9-53E0-4D0C-BCC0-2D784C282F6A}
+name: __Updated by
+key: __updated by
+content-length: 14
+
+sitecore\admin

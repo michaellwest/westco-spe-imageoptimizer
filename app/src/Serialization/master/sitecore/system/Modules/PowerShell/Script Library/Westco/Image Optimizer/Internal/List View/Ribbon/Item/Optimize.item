@@ -1,0 +1,98 @@
+----item----
+version: 1
+id: {0658B09D-EC5D-4C0E-96C0-83C7246911B1}
+database: master
+path: /sitecore/system/Modules/PowerShell/Script Library/Westco/Image Optimizer/Internal/List View/Ribbon/Item/Optimize
+parent: {ABA09DB4-3370-4540-85C3-9D4878757CA6}
+name: Optimize
+master: {00000000-0000-0000-0000-000000000000}
+template: {DD22F1B3-BD87-4DB2-9E7D-F7A496888D43}
+templatekey: PowerShell Script
+created: 20180514T160504Z
+
+----field----
+field: {1C76313E-3C8C-4807-A826-135D10C39299}
+name: ShowRule
+key: showrule
+content-length: 940
+
+<ruleset>  <rule uid="{5BCE1361-E936-464E-A656-C3177C3CC678}">    <conditions>      <or uid="1653762C88CA4C1A8FDED75B78ADEE25">        <or uid="3C26812C5B024339B2FBB1F67EBEE4A2">          <or uid="ADA3C70D898144BFAC8EEEED837A8DBF">            <condition id="{5DE6D53E-EA62-4D17-8BDD-FEBCD80AC07B}" uid="80F595E0BB554D1C85A2F232D57A13B0" templateid="{F1828A2C-7E5D-4BBD-98CA-320474871548}" />            <condition id="{5DE6D53E-EA62-4D17-8BDD-FEBCD80AC07B}" uid="413E6B8F5E2B4E9DA7FACF1039A07DD0" templateid="{DAF085E8-602E-43A6-8299-038FF171349F}" />          </or>          <condition id="{5DE6D53E-EA62-4D17-8BDD-FEBCD80AC07B}" uid="478D5157F93D43EAA9DEB071CB023D93" templateid="{C97BA923-8009-4858-BDD5-D8BE5FCCECF7}" />        </or>        <condition id="{5DE6D53E-EA62-4D17-8BDD-FEBCD80AC07B}" uid="2B111B3F44244C47AA10093D14DD1908" templateid="{EB3FB96C-D56B-4AC9-97F8-F07B24BB9BF7}" />      </or>    </conditions>  </rule></ruleset>
+----field----
+field: {B1A94FF0-6897-47C0-9C51-AA6ACB80B1F0}
+name: Script
+key: script
+content-length: 1014
+
+Import-Function -Name Invoke-Optimizer
+        
+$supportedExtensions = "jpg","jpeg","gif","png","svg"
+
+foreach($item in $selectedData) {
+    $extension = $item.Extension
+    if($supportedExtensions -notcontains $extension) {
+        Show-Alert "The selected extension $($extension) is not supported for optimization."
+        exit
+    }
+}
+
+$lookup = New-Object 'System.Collections.Generic.HashSet[string]'
+$totalCount = $selectedData.Count
+$count = 0
+foreach($item in $selectedData) {
+    $lookup.Add($item.ID) > $null
+    $count++
+    Write-Progress -Activity "Optimizing image" -Status "Submitted $($item.Name) for optimization" -PercentComplete ($count*100/$totalCount)
+    $result = Invoke-Optimizer -Item $item
+    Write-Host $result
+}
+
+Write-Progress -Completed -Activity "Done."
+
+$updatedData = [System.Collections.ArrayList]@()
+foreach($item in $allData) {
+    if(!$lookup.Contains($item.ID)) {
+        $updatedData.Add($item) > $null
+    }
+}
+
+$updatedData | Update-ListView
+----field----
+field: {06D5295C-ED2F-4A54-9BF2-26228D113318}
+name: __Icon
+key: __icon
+content-length: 27
+
+office/32x32/magic_wand.png
+----version----
+language: en
+version: 1
+revision: c3c37769-f717-4201-95d9-0d7fd413f8c5
+
+----field----
+field: {25BED78C-4957-4165-998A-CA1B52F67497}
+name: __Created
+key: __created
+content-length: 16
+
+20180514T160504Z
+----field----
+field: {8CDC337E-A112-42FB-BBB4-4143751E123F}
+name: __Revision
+key: __revision
+content-length: 36
+
+c3c37769-f717-4201-95d9-0d7fd413f8c5
+----field----
+field: {D9CF14B1-FA16-4BA6-9288-E8A174D4D522}
+name: __Updated
+key: __updated
+content-length: 16
+
+20180515T143021Z
+----field----
+field: {BADD9CF9-53E0-4D0C-BCC0-2D784C282F6A}
+name: __Updated by
+key: __updated by
+content-length: 14
+
+sitecore\admin

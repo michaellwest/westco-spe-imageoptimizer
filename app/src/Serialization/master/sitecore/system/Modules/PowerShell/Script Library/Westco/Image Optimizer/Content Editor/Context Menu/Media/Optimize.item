@@ -1,0 +1,90 @@
+----item----
+version: 1
+id: {B06819CA-4F79-4254-A14D-878523736EF9}
+database: master
+path: /sitecore/system/Modules/PowerShell/Script Library/Westco/Image Optimizer/Content Editor/Context Menu/Media/Optimize
+parent: {C88B9293-40A1-4925-A0E0-7BC7E56ABD16}
+name: Optimize
+master: {00000000-0000-0000-0000-000000000000}
+template: {DD22F1B3-BD87-4DB2-9E7D-F7A496888D43}
+templatekey: PowerShell Script
+created: 20180511T185500Z
+
+----field----
+field: {1C76313E-3C8C-4807-A826-135D10C39299}
+name: ShowRule
+key: showrule
+content-length: 970
+
+<ruleset>
+  <rule uid="{5BCE1361-E936-464E-A656-C3177C3CC678}">
+    <conditions>
+      <or uid="1653762C88CA4C1A8FDED75B78ADEE25">
+        <or uid="3C26812C5B024339B2FBB1F67EBEE4A2">
+          <or uid="ADA3C70D898144BFAC8EEEED837A8DBF">
+            <condition id="{5DE6D53E-EA62-4D17-8BDD-FEBCD80AC07B}" uid="80F595E0BB554D1C85A2F232D57A13B0" templateid="{F1828A2C-7E5D-4BBD-98CA-320474871548}" />
+            <condition id="{5DE6D53E-EA62-4D17-8BDD-FEBCD80AC07B}" uid="413E6B8F5E2B4E9DA7FACF1039A07DD0" templateid="{DAF085E8-602E-43A6-8299-038FF171349F}" />
+          </or>
+          <condition id="{5DE6D53E-EA62-4D17-8BDD-FEBCD80AC07B}" uid="478D5157F93D43EAA9DEB071CB023D93" templateid="{C97BA923-8009-4858-BDD5-D8BE5FCCECF7}" />
+        </or>
+        <condition id="{5DE6D53E-EA62-4D17-8BDD-FEBCD80AC07B}" uid="2B111B3F44244C47AA10093D14DD1908" templateid="{EB3FB96C-D56B-4AC9-97F8-F07B24BB9BF7}" />
+      </or>
+    </conditions>
+  </rule>
+</ruleset>
+----field----
+field: {B1A94FF0-6897-47C0-9C51-AA6ACB80B1F0}
+name: Script
+key: script
+content-length: 172
+
+Import-Function -Name Invoke-Optimizer
+
+$selectedItem = Get-Item -Path "."
+Invoke-Optimizer -Item $selectedItem
+
+Close-Window
+
+if($Error) {
+    Show-Result -Text
+}
+----field----
+field: {06D5295C-ED2F-4A54-9BF2-26228D113318}
+name: __Icon
+key: __icon
+content-length: 27
+
+Office/32x32/magic_wand.png
+----version----
+language: en
+version: 1
+revision: 5161843b-006c-4a04-b98f-d2abc057b7a8
+
+----field----
+field: {25BED78C-4957-4165-998A-CA1B52F67497}
+name: __Created
+key: __created
+content-length: 16
+
+20180511T185500Z
+----field----
+field: {8CDC337E-A112-42FB-BBB4-4143751E123F}
+name: __Revision
+key: __revision
+content-length: 36
+
+5161843b-006c-4a04-b98f-d2abc057b7a8
+----field----
+field: {D9CF14B1-FA16-4BA6-9288-E8A174D4D522}
+name: __Updated
+key: __updated
+content-length: 16
+
+20180515T144429Z
+----field----
+field: {BADD9CF9-53E0-4D0C-BCC0-2D784C282F6A}
+name: __Updated by
+key: __updated by
+content-length: 14
+
+sitecore\admin
