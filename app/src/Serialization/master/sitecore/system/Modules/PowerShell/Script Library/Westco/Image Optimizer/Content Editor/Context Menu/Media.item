@@ -11,6 +11,19 @@ templatekey: PowerShell Script Library
 created: 20180511T185222Z
 
 ----field----
+field: {613D128B-7BF2-40F4-84CB-6717408F9806}
+name: ShowRule
+key: showrule
+content-length: 309
+
+<ruleset>
+  <rule uid="{477DF04A-9A96-4F22-9FC5-893E6A173CFD}" name="Only show for media items">
+    <conditions>
+      <condition id="{7D5DA661-BEF9-441C-B1F7-D80DE3E0972F}" uid="C25FEE5AEC9F47F0A3272439C5E838D5" itemid="{3D6658D8-A0BF-4E75-B3E2-D050FABCF4E1}" />
+    </conditions>
+  </rule>
+</ruleset>
+----field----
 field: {06D5295C-ED2F-4A54-9BF2-26228D113318}
 name: __Icon
 key: __icon
@@ -20,7 +33,7 @@ Office/32x32/painting_landscape.png
 ----version----
 language: en
 version: 1
-revision: b97cf3c0-51de-4556-a5bb-2adab66798a7
+revision: 6d13012f-274c-4a0a-ade6-c9dd32848ba3
 
 ----field----
 field: {52807595-0F8F-4B20-8D2A-CB71D28C6103}
@@ -42,14 +55,14 @@ name: __Revision
 key: __revision
 content-length: 36
 
-b97cf3c0-51de-4556-a5bb-2adab66798a7
+6d13012f-274c-4a0a-ade6-c9dd32848ba3
 ----field----
 field: {D9CF14B1-FA16-4BA6-9288-E8A174D4D522}
 name: __Updated
 key: __updated
 content-length: 16
 
-20180522T144423Z
+20181017T195220Z
 ----field----
 field: {BADD9CF9-53E0-4D0C-BCC0-2D784C282F6A}
 name: __Updated by
