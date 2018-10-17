@@ -4,7 +4,7 @@ The current version of the module makes use of the online service https://compre
 
 ## Getting Started
 
-* Ensure that Sitecore PowerShell Extensions 4.7 or later is installed.
+* Ensure that Sitecore PowerShell Extensions 5.0 or later is installed.
 * Install the Image Optimizer package found in the repo.
 * Profit!
 
@@ -18,15 +18,17 @@ The module provides two ways to optimize. The first is through the context menu 
 
 ### Report Menu
 
-![reportmenu](https://user-images.githubusercontent.com/933163/40372646-bf276eea-5daa-11e8-84a2-5ebf2c9a4045.PNG)
+The following are included with SPE 5.0 and should be used to help aid finding large images.
+
+![reportmenu](https://user-images.githubusercontent.com/933163/47112164-29151e80-d21b-11e8-90cf-d803d3b62933.png)
 
 #### Filter for Report
 
-![filter](https://user-images.githubusercontent.com/933163/40372652-c49a9f50-5daa-11e8-8d9f-80bc8e39a20f.PNG)
+![filter](https://user-images.githubusercontent.com/933163/47112204-46e28380-d21b-11e8-95c5-a5f4304719c9.png)
 
 #### Report Output
 
-![reportoutput](https://user-images.githubusercontent.com/933163/40372681-cc98482e-5daa-11e8-8f47-868d0f25bd40.PNG)
+![reportoutput](https://user-images.githubusercontent.com/933163/47112340-af316500-d21b-11e8-97c6-b83c1ea4828a.png)
 
 
 ## Credit
